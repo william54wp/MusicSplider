@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>音乐采集</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.3/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="https://cdn.bootcss.com/angular.js/1.6.5/angular.min.js"></script>
+    <style>
+        .latest-type .radio {
+            display: inline-block;
+            margin-left: 1.5em;
+        }
+        
+        .latest_limit {
+            height: 34px;
+            line-height: 34px;
+        }
+        
+        .set_latest_type {
+            width: 100%;
+            display: block;
+        }
+        
+        .song_panel,
+        .album_panel {
+            height: 414px;
+            overflow-y: scroll;
+        }
+    </style>
+</head>
+
+<body ng-app="music-splider" ng-controller="myctrl">
+
+    <nav class="navbar navbar-default" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">网易云音乐采集</a>
+        </div>
+    </nav>
+
+    <div class="row">
+
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+
+            <!-- 最新专辑 -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">采集最新专辑</h3>
+                </div>
+                <div class="panel-body latest-type">
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="latest-type" id="radio_all" value="all" ng-model="area"/>
+                            全部
+                            </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="latest-type" id="radio_CH" value="zh" ng-model="area"/>
+                            国语
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="latest-type" id="radio_EA" value="ea" ng-model="area"/>
+                            欧美
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="latest-type" id="radio_KR" value="kr" ng-model="area"/>
+                            韩国
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="latest-type" id="radio_JP" value="jp" ng-model="area"/>
+                            日本
+                        </label>
+                    </div>
+                    <hr/>
+
+                    <div class="form-group">
+                        <label for="input1_limit" class="col-sm-3 control-label latest_limit">采集数量:</label>
+                        <div class="col-sm-3">
+                            <input type="number" name="" id="input1_limit" class="form-control" value="20" ng-model='limit' min="0" max="40" step="" required="required" title="">
+                        </div>
+                        <button type="button" class="btn btn-default pull-right" id="set_latest_type" ng-click="getNewAlbums()">解析</button>
+                    </div>
+
+                </div>
+            </div>
+            <!-- 指定歌手查询 -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">指定歌手</h3>
+                </div>
+                <div class="panel-body">
+
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="singer" placeholder="歌手名字或ID" ng-model="singer">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default" ng-click="getSingerAlbums()">查询</button>
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+            <!-- 指定专辑 -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">指定专辑</h3>
+                </div>
+                <div class="panel-body">
+
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="exampleInputAmount" placeholder="专辑ID" />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default">获取</button>
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+            <!-- 指定歌单 -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">指定歌单</h3>
+                </div>
+                <div class="panel-body">
+
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="exampleInputAmount" placeholder="歌单ID">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default">获取</button>
+                        </span>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">专辑列表</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="album_panel">
+                        <!-- angularjs AJAX模板 -->
+                        <div class="checkbox" ng-repeat="album in Albums">
+                            <label>
+                            <input type="checkbox" value="" class="albums" ng-checked="all" ng-model="album.check"> 
+                            <span>{{ album.name }}</span>
+                        </label>
+                        </div>
+                        <!-- angularjs AJAX模板 -->
+                    </div>
+                    <hr/>
+                    <div class="form-group">
+                        <input id="chkall" type="checkbox" ng-model="all" ng-checked="checkAll()"><label for="chkall" style="margin:0 .5em">全选/全不选</label>
+                        <input id="chkop" type="checkbox" ng-click="chk_ops()"><label for="chkop" style="margin:0 .5em">反选</label>
+                        <button type="button" class="btn btn-default pull-right" ng-click="getSong()">解析</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">音乐列表</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="song_panel">
+                        <div class="checkbox" ng-repeat="Song in Songs">
+                            <label>
+                            <input type="checkbox" value="" class="song" ng-checked="all" > 
+                            <span>{{ Song.name }}</span>
+                        </label>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default" ng-click="CmdZipDown()">生成下载命令</butto>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="well">
+            <div class="songMsg">{{ SongMsg }}</div>
+            <div class="downzip"> <a href="{{ zipPath }}" target="_blank">下载命令包</a> </div>
+        </div>
+
+    </div>
+
+    <script src="__JS__/music/IndexInit.js"></script>
+
+    <script>
+        var album_New_Controller = '{$album_url}';
+        var album_Detail_Controller = '{$albumDetail_url}';
+        var splider_downloadSpliderCmd_Controller = '{$downloadSpliderCmd}';
+    </script>
+</body>
+
+</html>
