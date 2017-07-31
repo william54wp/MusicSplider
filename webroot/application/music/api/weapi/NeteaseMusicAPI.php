@@ -17,15 +17,19 @@ class NeteaseMusicAPI
     protected $_MINI_MODE=true;
     // protected $_MINI_MODE=false;
     protected $_MODULUS='00e0b509f6259df8642dbc35662901477df22677ec152b5ff68ace615bb7b725152b3ab17a876aea8a5aa76d2e417629ec4ee341f56135fccf695280104e0312ecbda92557c93870114af6c9d05c4f7f0c3685b7a46bee255932575cce10b424d813cfe4875d3e82047b97ddef52741d546b8e289dc6935b3ece0462db0a22b8e7';
+    // protected $_NONCE='0CoJUm6Qyw8W8jud';
     protected $_NONCE='0CoJUm6Qyw8W8jud';
     protected $_PUBKEY='010001';
     protected $_VI='0102030405060708';
     protected $_USERAGENT='Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.157 Safari/537.36';
-    protected $_COOKIE='os=pc; osver=Microsoft-Windows-10-Professional-build-10586-64bit; appver=2.0.3.131777; channel=netease; __remember_me=true';
+    // protected $_COOKIE='os=pc; osver=Microsoft-Windows-10-Professional-build-10586-64bit; appver=2.0.3.131777; channel=netease; __remember_me=true';
+    protected $_COOKIE='_ntes_nnid=09ff33047f9240a3a2b18e41c7f399ff,1496802567336; _ntes_nuid=09ff33047f9240a3a2b18e41c7f399ff; usertrack=c+xxC1lZ+zSb5dPyoD7dAg==; _ga=GA1.2.1443120495.1499069241; __guid=94650624.3939550675882987500.1499652987712.1104; __s_=1; JSESSIONID-WYYY=%5CozCFu40gmS1XPEb3iAMy5X%2FRT8WhoMZ8bxWSlYgzIvzXU2bGtUDAyu4jQnHZhkYsok3htJ0qm2gVbcWMiC8CWKokjh4idAwR5754%2Fpr5q6HMNgDzd5zZdr19%2FDuRbK0OPruVe9A6fAWZcX%5CVD4ovOQqpGYe2XwO4N09%2B5CdBMn5yMYp%3A1501468748400; _iuqxldmzr_=32; __utma=94650624.2121632400.1496802568.1501465209.1501467670.21; __utmc=94650624; __utmz=94650624.1501225523.17.9.utmcsr=hacg.fi|utmccn=(referral)|utmcmd=referral|utmcct=/wp/comic.html; playerid=94877151';
     protected $_REFERER='http://music.163.com/';
     // use static secretKey, without RSA algorithm
-    protected $_secretKey='TA3YiYCfY2dDJQgg';
-    protected $_encSecKey='84ca47bca10bad09a6b04c5c927ef077d9b9f1e37098aa3eac6ea70eb59df0aa28b691b7e75e4f1f9831754919ea784c8f74fbfadf2898b0be17849fd656060162857830e241aba44991601f137624094c114ea8d17bce815b0cd4e5b8e2fbaba978c6d1d14dc3d1faf852bdd28818031ccdaaa13a6018e1024e2aae98844210';
+    // protected $_secretKey='TA3YiYCfY2dDJQgg';
+    protected $_secretKey='trAli4NVW0cpeObN';
+    // protected $_encSecKey='84ca47bca10bad09a6b04c5c927ef077d9b9f1e37098aa3eac6ea70eb59df0aa28b691b7e75e4f1f9831754919ea784c8f74fbfadf2898b0be17849fd656060162857830e241aba44991601f137624094c114ea8d17bce815b0cd4e5b8e2fbaba978c6d1d14dc3d1faf852bdd28818031ccdaaa13a6018e1024e2aae98844210';
+    protected $_encSecKey='1559239db1c10acf0dc36059dca87c46018f566868dc0334a241028428390938df546aa8f2612a70d08cebcbd0b748b1fbc66a37b9d6693ae5939808e3c0fcd5532a0989a4beb1239673473620f88232965b1ba2a1f5f41ce7895089a0ea180a973d2ab40f19352c356bc50072e6edab085842e78cc0fe181e10f12e3452fb26';
 
     // encrypt mod
     protected function prepare($raw)
@@ -141,7 +145,7 @@ class NeteaseMusicAPI
         }
     }
 
-    public function url($song_id, $br = 999000)
+    public function url($song_id, $br = 128e3)
     {
         $url='http://music.163.com/weapi/song/enhance/player/url?csrf_token=';
         if (!is_array($song_id)) {
